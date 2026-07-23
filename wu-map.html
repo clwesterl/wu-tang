@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wu-Tang Credit Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0B0C; --slab:#141416; --slab-2:#1C1C1F;
+  --gold:#C8A227; --gold-hot:#F2C744; --blood:#8C1C13;
+  --bone:#E6E1D3; --smoke:#6E6A63;
+  --display:"Big Shoulders Display","Arial Narrow",sans-serif;
+  --body:"Archivo",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --rule:1px solid rgba(200,162,39,.22);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:14px;
+  line-height:1.45;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+header{border-bottom:var(--rule);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;padding:14px 20px 12px}
+h1{margin:0;font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.02em;
+  line-height:.9;color:var(--gold);text-transform:uppercase}
+h1 span{color:var(--bone)}
+.tagline{font-family:var(--mono);font-size:11px;color:var(--smoke);letter-spacing:.06em}
+.views{margin-left:auto;display:flex;border:1px solid rgba(200,162,39,.3)}
+.views button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;color:var(--smoke);border:0;padding:7px 14px;cursor:pointer}
+.views button+button{border-left:1px solid rgba(200,162,39,.3)}
+.views button[aria-pressed="true"]{background:var(--gold);color:var(--ink);font-weight:500}
+.views button:focus-visible{outline:2px solid var(--gold-hot);outline-offset:2px}
+
+/* coverage meter — the app doubles as its own sync dashboard */
+.coverage{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--smoke)}
+.meter{width:96px;height:6px;background:rgba(230,225,211,.12);position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--gold);display:block}
+
+main{flex:1;min-height:0;display:flex}
+.chambers{display:grid;grid-template-columns:minmax(230px,1fr) minmax(250px,1.15fr) minmax(260px,1.3fr);
+  gap:1px;background:rgba(200,162,39,.18);width:100%;min-height:0}
+.pane{background:var(--slab);display:flex;flex-direction:column;min-height:0;min-width:0;transition:opacity .18s ease}
+.pane.passed{opacity:.6}
+.pane-head{padding:11px 16px 9px;border-bottom:var(--rule);background:var(--ink);flex:0 0 auto}
+.numeral{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.22em;color:var(--gold);display:block}
+.pane-title{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.05;text-transform:uppercase}
+.pane-sub{font-family:var(--mono);font-size:10.5px;color:var(--smoke);margin-top:3px;letter-spacing:.04em}
+.pane-body{overflow-y:auto;flex:1;min-height:0}
+
+.tabs{display:flex;border-bottom:var(--rule)}
+.tabs button{flex:1;background:transparent;border:0;cursor:pointer;padding:9px 6px;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--smoke)}
+.tabs button[aria-selected="true"]{color:var(--gold-hot);box-shadow:inset 0 -2px 0 var(--gold)}
+.tabs button:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+
+.filter{border-bottom:var(--rule);padding:0}
+.filter input{width:100%;background:var(--slab-2);border:0;color:var(--bone);font-family:var(--mono);
+  font-size:11px;padding:9px 16px;letter-spacing:.04em}
+.filter input::placeholder{color:var(--smoke)}
+.filter input:focus{outline:2px solid var(--gold);outline-offset:-2px}
+
+.group-head{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);padding:14px 16px 5px;border-bottom:1px solid rgba(200,162,39,.16);
+  position:sticky;top:0;background:var(--slab)}
+.row{display:flex;align-items:baseline;gap:10px;width:100%;text-align:left;background:transparent;border:0;
+  border-bottom:1px solid rgba(230,225,211,.07);color:var(--bone);cursor:pointer;padding:9px 16px;font:inherit}
+.row:hover{background:var(--slab-2)}
+.row[aria-current="true"]{background:rgba(200,162,39,.13);box-shadow:inset 3px 0 0 var(--gold)}
+.row:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.row-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-num{font-family:var(--mono);font-size:11px;color:var(--smoke);width:2ch;flex:0 0 auto}
+.row-count{font-family:var(--mono);font-size:11px;color:var(--gold);flex:0 0 auto}
+.row-meta{font-family:var(--mono);font-size:10.5px;color:var(--smoke);flex:0 0 auto}
+.row-sub{display:block;font-family:var(--mono);font-size:10px;color:var(--smoke);margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{width:6px;height:6px;flex:0 0 auto;border-radius:50%;background:var(--gold)}
+.dot.empty{background:none;border:1px solid rgba(230,225,211,.22)}
+
+.empty{padding:26px 18px;color:var(--smoke);font-size:13px;max-width:36ch}
+.empty b{color:var(--bone);font-weight:600;display:block;margin-bottom:5px;font-family:var(--display);
+  font-size:17px;text-transform:uppercase}
+
+.detail{padding:16px}
+.detail h2{font-family:var(--display);font-weight:900;font-size:27px;line-height:1;margin:0 0 4px;text-transform:uppercase}
+.detail .origin{font-family:var(--mono);font-size:11px;color:var(--smoke);margin-bottom:16px}
+.detail .origin a{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)}
+.credit{display:flex;align-items:baseline;gap:10px;padding:7px 0;border:0;border-bottom:1px solid rgba(230,225,211,.07);
+  width:100%;background:transparent;color:var(--bone);font:inherit;text-align:left;cursor:pointer}
+.credit:hover .credit-name{color:var(--gold-hot)}
+.credit:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.credit-slot{font-family:var(--mono);font-size:10.5px;color:var(--smoke);width:4.5ch;flex:0 0 auto}
+.credit-name{flex:1;font-weight:500}
+.chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 6px;border:1px solid currentColor;flex:0 0 auto}
+.chip.performer{color:var(--gold)} .chip.hook{color:var(--bone)}
+.chip.producer{color:var(--blood)} .chip.skit,.chip.sample{color:var(--smoke)}
+.uncredited{color:var(--smoke);font-style:italic}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--smoke);margin:20px 0 6px;padding-bottom:4px;border-bottom:var(--rule)}
+.section-label:first-child{margin-top:0}
+
+.matrix-wrap{width:100%;overflow:auto;padding:26px 20px 40px}
+.matrix-intro{max-width:58ch;color:var(--smoke);margin:0 0 22px;font-size:13px}
+table.matrix{border-collapse:collapse;font-family:var(--mono);font-size:11px}
+table.matrix th{font-weight:400;color:var(--smoke);white-space:nowrap}
+table.matrix thead th{height:130px;vertical-align:bottom;padding:0 0 8px}
+table.matrix thead th div{writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;color:var(--bone)}
+table.matrix tbody th{text-align:right;padding:0 12px 0 0;color:var(--bone)}
+table.matrix td{width:38px;height:38px;text-align:center;border:1px solid rgba(230,225,211,.08);
+  cursor:pointer;color:var(--ink);font-weight:500;padding:0}
+table.matrix td.zero{color:rgba(230,225,211,.16);cursor:default}
+table.matrix td.diag{background:repeating-linear-gradient(45deg,transparent,transparent 3px,
+  rgba(230,225,211,.07) 3px,rgba(230,225,211,.07) 4px);cursor:default}
+table.matrix td.hit:hover,table.matrix td:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.matrix-out{margin-top:26px;max-width:62ch}
+.matrix-out h3{font-family:var(--display);font-size:20px;text-transform:uppercase;margin:0 0 8px}
+
+@media (max-width:900px){
+  main{display:block;overflow-y:auto}
+  .chambers{display:block;background:none}
+  .pane{border-bottom:var(--rule)} .pane.passed{opacity:1}
+  .pane-body{overflow:visible} .group-head{position:static} h1{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Wu-Tang <span>Credit Map</span></h1>
+    <div class="tagline">who is on what · a tripartite credit graph</div>
+  </div>
+  <div class="coverage" id="coverage"></div>
+  <div class="views">
+    <button id="v-browse" aria-pressed="true">Browse</button>
+    <button id="v-matrix" aria-pressed="false">Matrix</button>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<script>
+/* ============================================================================
+   DATA
+   ----------------------------------------------------------------------------
+   RELEASES are the spine: hand-entered, ~80 titles. Years and labels are from
+   memory and want a pass against Discogs before you trust them.
+
+   TRACKS and APPEARANCES are the scraper's job. Only 36 Chambers is seeded, so
+   almost every release below reads "not synced" — which is the point. The
+   coverage meter in the header is your progress bar.
+
+   Releases are stored as tuples to keep the file editable by hand:
+       [id, title, artist_id, year, label, kind]
+   kind = group | solo | collab | soundtrack | unreleased
+   ==========================================================================*/
+
+const ARTISTS = [
+  ["wu-tang-clan",    "Wu-Tang Clan",     [],                              "group", "core"],
+  ["rza",             "RZA",              ["Prince Rakeem","Bobby Digital"],"mc",   "core"],
+  ["gza",             "GZA",              ["The Genius"],                  "mc",    "core"],
+  ["ol-dirty-bastard","Ol' Dirty Bastard",["ODB","Dirt McGirt"],           "mc",    "core"],
+  ["method-man",      "Method Man",       ["Johnny Blaze","Tical"],        "mc",    "core"],
+  ["raekwon",         "Raekwon",          ["The Chef","Lex Diamonds"],     "mc",    "core"],
+  ["ghostface-killah","Ghostface Killah", ["Tony Starks","Pretty Toney"],  "mc",    "core"],
+  ["inspectah-deck",  "Inspectah Deck",   ["Rebel INS"],                   "mc",    "core"],
+  ["u-god",           "U-God",            ["Golden Arms"],                 "mc",    "core"],
+  ["masta-killa",     "Masta Killa",      ["Noodles"],                     "mc",    "core"],
+  ["cappadonna",      "Cappadonna",       [],                              "mc",    "core"],
+  ["gravediggaz",     "Gravediggaz",      [],                              "group", "affiliate"],
+  ["czarface",        "Czarface",         [],                              "group", "affiliate"]
+];
+
+const RELEASES = [
+  /* --- Wu-Tang Clan --------------------------------------------------- */
+  ["36-chambers","Enter the Wu-Tang (36 Chambers)","wu-tang-clan",1993,"Loud / RCA","group"],
+  ["wu-tang-forever","Wu-Tang Forever","wu-tang-clan",1997,"Loud / RCA","group"],
+  ["the-w","The W","wu-tang-clan",2000,"Loud / Columbia","group"],
+  ["iron-flag","Iron Flag","wu-tang-clan",2001,"Loud / Columbia","group"],
+  ["8-diagrams","8 Diagrams","wu-tang-clan",2007,"SRC / Universal Motown","group"],
+  ["a-better-tomorrow","A Better Tomorrow","wu-tang-clan",2014,"Warner Bros.","group"],
+  ["shaolin-single-copy","Once Upon a Time in Shaolin","wu-tang-clan",2015,"Scluzay","unreleased"],
+  ["saga-continues","The Saga Continues","wu-tang-clan",2017,"eOne","group"],
+
+  /* --- RZA ------------------------------------------------------------- */
+  ["bobby-digital","Bobby Digital in Stereo","rza",1998,"Gee Street","solo"],
+  ["ghost-dog-ost","Ghost Dog: Way of the Samurai OST","rza",1999,"Epic","soundtrack"],
+  ["digital-bullet","Digital Bullet","rza",2001,"Koch","solo"],
+  ["birth-of-a-prince","Birth of a Prince","rza",2003,"Sanctuary Urban","solo"],
+  ["afro-samurai-ost","Afro Samurai OST","rza",2007,"Koch","soundtrack"],
+  ["digi-snacks","Digi Snacks","rza",2008,"Koch","solo"],
+  ["6-feet-deep","6 Feet Deep","gravediggaz",1994,"Gee Street","collab"],
+  ["pick-sickle-shovel","The Pick, the Sickle and the Shovel","gravediggaz",1997,"Gee Street","collab"],
+
+  /* --- GZA ------------------------------------------------------------- */
+  ["words-from-the-genius","Words from the Genius","gza",1991,"Cold Chillin'","solo"],
+  ["liquid-swords","Liquid Swords","gza",1995,"Geffen","solo"],
+  ["beneath-the-surface","Beneath the Surface","gza",1999,"MCA","solo"],
+  ["legend-liquid-sword","Legend of the Liquid Sword","gza",2002,"MCA","solo"],
+  ["grandmasters","Grandmasters (with DJ Muggs)","gza",2005,"Angeles","collab"],
+  ["pro-tools","Pro Tools","gza",2008,"Babygrande","solo"],
+
+  /* --- Ol' Dirty Bastard ----------------------------------------------- */
+  ["return-to-36","Return to the 36 Chambers: The Dirty Version","ol-dirty-bastard",1995,"Elektra","solo"],
+  ["nigga-please","N**** Please","ol-dirty-bastard",1999,"Elektra","solo"],
+  ["trials-tribulations","The Trials and Tribulations of Russell Jones","ol-dirty-bastard",2003,"D3 / Roc-A-Fella","solo"],
+  ["a-son-unique","A Son Unique","ol-dirty-bastard",2005,"Roc-A-Fella","unreleased"],
+
+  /* --- Method Man ------------------------------------------------------ */
+  ["tical","Tical","method-man",1994,"Def Jam","solo"],
+  ["tical-2000","Tical 2000: Judgement Day","method-man",1998,"Def Jam","solo"],
+  ["blackout","Blackout! (with Redman)","method-man",1999,"Def Jam","collab"],
+  ["tical-0","Tical 0: The Prequel","method-man",2004,"Def Jam","solo"],
+  ["day-after","4:21... The Day After","method-man",2006,"Def Jam","solo"],
+  ["blackout-2","Blackout! 2 (with Redman)","method-man",2009,"Def Jam","collab"],
+  ["meth-lab","The Meth Lab","method-man",2015,"Hanz On / Tommy Boy","solo"],
+  ["meth-lab-2","The Meth Lab Season 2: The Lithium","method-man",2018,"Hanz On","solo"],
+  ["meth-lab-3","Meth Lab Season 3: The Rehab","method-man",2022,"Hanz On","solo"],
+
+  /* --- Raekwon --------------------------------------------------------- */
+  ["ob4cl","Only Built 4 Cuban Linx...","raekwon",1995,"Loud / RCA","solo"],
+  ["immobilarity","Immobilarity","raekwon",1999,"Loud","solo"],
+  ["lex-diamond-story","The Lex Diamond Story","raekwon",2003,"Ice H2O / Universal","solo"],
+  ["ob4cl2","Only Built 4 Cuban Linx... Pt. II","raekwon",2009,"Ice H2O / EMI","solo"],
+  ["shaolin-vs-wu-tang","Shaolin vs. Wu-Tang","raekwon",2011,"Ice H2O","solo"],
+  ["fila","Fly International Luxurious Art","raekwon",2015,"Ice H2O / Caroline","solo"],
+  ["the-wild","The Wild","raekwon",2017,"Ice H2O / EMPIRE","solo"],
+
+  /* --- Ghostface Killah ------------------------------------------------ */
+  ["ironman","Ironman","ghostface-killah",1996,"Razor Sharp / Epic","solo"],
+  ["supreme-clientele","Supreme Clientele","ghostface-killah",2000,"Razor Sharp / Epic","solo"],
+  ["bulletproof-wallets","Bulletproof Wallets","ghostface-killah",2001,"Epic","solo"],
+  ["pretty-toney","The Pretty Toney Album","ghostface-killah",2004,"Def Jam","solo"],
+  ["fishscale","Fishscale","ghostface-killah",2006,"Def Jam","solo"],
+  ["more-fish","More Fish","ghostface-killah",2006,"Def Jam","solo"],
+  ["big-doe-rehab","The Big Doe Rehab","ghostface-killah",2007,"Def Jam","solo"],
+  ["ghostdini","Ghostdini: Wizard of Poetry in Emerald City","ghostface-killah",2009,"Def Jam","solo"],
+  ["apollo-kids","Apollo Kids","ghostface-killah",2010,"Def Jam","solo"],
+  ["twelve-reasons","Twelve Reasons to Die","ghostface-killah",2013,"Soul Temple","collab"],
+  ["36-seasons","36 Seasons","ghostface-killah",2014,"Tommy Boy","solo"],
+  ["sour-soul","Sour Soul (with BADBADNOTGOOD)","ghostface-killah",2015,"Lex","collab"],
+  ["twelve-reasons-2","Twelve Reasons to Die II","ghostface-killah",2015,"Linear Labs","collab"],
+  ["ghost-lost-tapes","The Lost Tapes","ghostface-killah",2018,"X-Ray","solo"],
+
+  /* --- Inspectah Deck -------------------------------------------------- */
+  ["uncontrolled-substance","Uncontrolled Substance","inspectah-deck",1999,"Loud","solo"],
+  ["the-movement","The Movement","inspectah-deck",2003,"In the Paint / Koch","solo"],
+  ["resident-patient","The Resident Patient","inspectah-deck",2006,"Urban Icon","solo"],
+  ["manifesto","Manifesto","inspectah-deck",2010,"Traffic","solo"],
+  ["chamber-no-9","Chamber No. 9","inspectah-deck",2019,"Bronx Bridge","solo"],
+  ["czarface-1","Czarface","czarface",2013,"Brick","collab"],
+  ["every-hero","Every Hero Needs a Villain","czarface",2015,"Brick","collab"],
+  ["fistful-of-peril","A Fistful of Peril","czarface",2016,"Silver Age","collab"],
+  ["czarface-doom","Czarface Meets Metal Face (with MF DOOM)","czarface",2018,"Silver Age","collab"],
+  ["odd-czar","The Odd Czar Against Us","czarface",2019,"Silver Age","collab"],
+  ["czarface-ghostface","Czarface Meets Ghostface","czarface",2019,"Silver Age","collab"],
+  ["super-what","Super What? (with MF DOOM)","czarface",2021,"Silver Age","collab"],
+
+  /* --- U-God ----------------------------------------------------------- */
+  ["golden-arms","Golden Arms Redemption","u-god",1999,"Priority","solo"],
+  ["mr-xcitement","Mr. Xcitement","u-god",2005,"Free Agency","solo"],
+  ["dopium","Dopium","u-god",2009,"Babygrande","solo"],
+  ["keynote-speaker","The Keynote Speaker","u-god",2013,"Soul Temple","solo"],
+  ["venom","Venom","u-god",2018,"Babygrande","solo"],
+
+  /* --- Masta Killa ----------------------------------------------------- */
+  ["no-said-date","No Said Date","masta-killa",2004,"Nature Sounds","solo"],
+  ["made-in-brooklyn","Made in Brooklyn","masta-killa",2006,"Nature Sounds","solo"],
+  ["selling-my-soul","Selling My Soul","masta-killa",2012,"Nature Sounds","solo"],
+  ["loyalty-is-royalty","Loyalty Is Royalty","masta-killa",2017,"Nature Sounds","solo"],
+
+  /* --- Cappadonna ------------------------------------------------------ */
+  ["the-pillage","The Pillage","cappadonna",1998,"Razor Sharp / Epic","solo"],
+  ["yin-and-yang","The Yin and the Yang","cappadonna",2001,"Epic","solo"],
+  ["the-struggle","The Struggle","cappadonna",2003,"Code Red","solo"],
+  ["cappatalize","The Cappatalize Project","cappadonna",2008,"Chambermusik","solo"],
+  ["slang-prostitution","Slang Prostitution","cappadonna",2009,"Chambermusik","solo"],
+  ["eyrth-wynd-fyre","Eyrth, Wynd & Fyre","cappadonna",2013,"Rock Bottom","solo"],
+
+  /* --- multi-member ---------------------------------------------------- */
+  ["wu-massacre","Wu-Massacre","method-man",2010,"Def Jam","collab"]
+];
+
+/* Tracks + appearances: only 36 Chambers is seeded. */
+const TRACKS = [
+  ["bring-da-ruckus","36-chambers",1,"Bring da Ruckus"],
+  ["shame-on-a-nigga","36-chambers",2,"Shame on a N****"],
+  ["clan-in-da-front","36-chambers",3,"Clan in da Front"],
+  ["7th-chamber","36-chambers",4,"Wu-Tang: 7th Chamber"],
+  ["can-it-be","36-chambers",5,"Can It Be All So Simple"],
+  ["chessboxin","36-chambers",6,"Da Mystery of Chessboxin'"],
+  ["aint-nuthing","36-chambers",7,"Wu-Tang Clan Ain't Nuthing ta F' Wit"],
+  ["cream","36-chambers",8,"C.R.E.A.M."],
+  ["method-man-track","36-chambers",9,"Method Man"],
+  ["protect-ya-neck","36-chambers",10,"Protect Ya Neck"],
+  ["tearz","36-chambers",11,"Tearz"],
+  ["7th-chamber-pt2","36-chambers",12,"Wu-Tang: 7th Chamber \u2013 Part II"],
+  ["conclusion","36-chambers",13,"Conclusion"]
+];
+
+/* [track, artist, role, slot, credited, note] — verse slots still unverified */
+const APPEARANCES = [
+  ["bring-da-ruckus","ghostface-killah","performer",1,1,null],
+  ["bring-da-ruckus","raekwon","performer",2,1,null],
+  ["bring-da-ruckus","inspectah-deck","performer",3,1,null],
+  ["bring-da-ruckus","gza","performer",4,1,null],
+  ["bring-da-ruckus","rza","producer",null,1,null],
+  ["shame-on-a-nigga","ol-dirty-bastard","performer",1,1,"also carries the hook"],
+  ["shame-on-a-nigga","raekwon","performer",2,1,null],
+  ["shame-on-a-nigga","method-man","performer",3,1,null],
+  ["shame-on-a-nigga","rza","producer",null,1,null],
+  ["clan-in-da-front","gza","performer",1,1,"solo"],
+  ["clan-in-da-front","rza","producer",null,1,null],
+  ["7th-chamber","rza","performer",1,1,null],
+  ["7th-chamber","ghostface-killah","performer",2,1,null],
+  ["7th-chamber","inspectah-deck","performer",3,1,null],
+  ["7th-chamber","raekwon","performer",4,1,null],
+  ["7th-chamber","method-man","performer",5,1,null],
+  ["7th-chamber","ol-dirty-bastard","performer",6,1,null],
+  ["7th-chamber","u-god","performer",7,1,null],
+  ["7th-chamber","gza","performer",8,1,null],
+  ["7th-chamber","rza","producer",null,1,null],
+  ["can-it-be","raekwon","performer",1,1,null],
+  ["can-it-be","ghostface-killah","performer",2,1,null],
+  ["can-it-be","rza","producer",null,1,null],
+  ["chessboxin","ol-dirty-bastard","hook",null,1,"intro / ad-libs"],
+  ["chessboxin","u-god","performer",1,1,null],
+  ["chessboxin","inspectah-deck","performer",2,1,null],
+  ["chessboxin","raekwon","performer",3,1,null],
+  ["chessboxin","ghostface-killah","performer",4,1,null],
+  ["chessboxin","method-man","performer",5,1,null],
+  ["chessboxin","masta-killa","performer",6,1,"his only verse on the album"],
+  ["chessboxin","rza","producer",null,1,null],
+  ["aint-nuthing","method-man","performer",1,1,null],
+  ["aint-nuthing","rza","performer",2,1,null],
+  ["aint-nuthing","inspectah-deck","performer",3,1,null],
+  ["aint-nuthing","rza","producer",null,1,null],
+  ["cream","raekwon","performer",1,1,null],
+  ["cream","inspectah-deck","performer",2,1,null],
+  ["cream","method-man","hook",null,1,null],
+  ["cream","rza","producer",null,1,null],
+  ["method-man-track","method-man","performer",1,1,"solo"],
+  ["method-man-track","rza","producer",null,1,null],
+  ["protect-ya-neck","inspectah-deck","performer",1,1,null],
+  ["protect-ya-neck","raekwon","performer",2,1,null],
+  ["protect-ya-neck","method-man","performer",3,1,null],
+  ["protect-ya-neck","u-god","performer",4,1,"short verse"],
+  ["protect-ya-neck","ol-dirty-bastard","performer",5,1,null],
+  ["protect-ya-neck","ghostface-killah","performer",6,1,null],
+  ["protect-ya-neck","rza","performer",7,1,null],
+  ["protect-ya-neck","gza","performer",8,1,null],
+  ["protect-ya-neck","rza","producer",null,1,null],
+  ["tearz","rza","performer",1,1,null],
+  ["tearz","ghostface-killah","performer",2,1,null],
+  ["tearz","rza","producer",null,1,null],
+  ["7th-chamber-pt2","rza","performer",1,1,null],
+  ["7th-chamber-pt2","ghostface-killah","performer",2,1,null],
+  ["7th-chamber-pt2","inspectah-deck","performer",3,1,null],
+  ["7th-chamber-pt2","raekwon","performer",4,1,null],
+  ["7th-chamber-pt2","method-man","performer",5,1,null],
+  ["7th-chamber-pt2","ol-dirty-bastard","performer",6,1,null],
+  ["7th-chamber-pt2","u-god","performer",7,1,null],
+  ["7th-chamber-pt2","gza","performer",8,1,null],
+  ["7th-chamber-pt2","rza","producer",null,1,null],
+  ["conclusion","rza","skit",null,1,null],
+  ["conclusion","rza","producer",null,1,null]
+];
+
+/* --- expand tuples into records ---------------------------------------- */
+const DATA = {
+  artists: ARTISTS.map(([id,name,aka,type,tier]) => ({id,name,aka,type,tier})),
+  releases: RELEASES.map(([id,title,artist_id,year,label,kind]) =>
+    ({id,title,artist_id,year,label,kind,discogs_id:null})),
+  tracks: TRACKS.map(([id,release_id,position,title]) =>
+    ({id,release_id,position,title,duration:null})),
+  appearances: APPEARANCES.map(([track_id,artist_id,role,slot,credited,note]) =>
+    ({track_id,artist_id,role,slot,credited:!!credited,note}))
+};
+
+/* ============================================================================
+   INDEXES
+   ==========================================================================*/
+const byId = a => Object.fromEntries(a.map(x=>[x.id,x]));
+const A = byId(DATA.artists), R = byId(DATA.releases), T = byId(DATA.tracks);
+const apsByTrack={}, apsByArtist={}, tracksByRelease={}, relsByArtist={};
+for (const ap of DATA.appearances){ (apsByTrack[ap.track_id]||=[]).push(ap); (apsByArtist[ap.artist_id]||=[]).push(ap); }
+for (const t of DATA.tracks) (tracksByRelease[t.release_id]||=[]).push(t);
+for (const k in tracksByRelease) tracksByRelease[k].sort((a,b)=>a.position-b.position);
+for (const r of DATA.releases) (relsByArtist[r.artist_id]||=[]).push(r);
+for (const k in relsByArtist) relsByArtist[k].sort((a,b)=>a.year-b.year);
+
+const ON_MIC = new Set(["performer","hook"]);
+const synced = r => (tracksByRelease[r.id]||[]).length;
+
+function tracksForArtist(id){
+  const seen=new Set();
+  return (apsByArtist[id]||[]).map(ap=>T[ap.track_id])
+    .filter(t=>t && !seen.has(t.id) && seen.add(t.id))
+    .sort((a,b)=>a.release_id.localeCompare(b.release_id)||a.position-b.position);
+}
+function sharedTracks(a1,a2){
+  const set = id => new Set((apsByArtist[id]||[]).filter(ap=>ON_MIC.has(ap.role)).map(ap=>ap.track_id));
+  const s1=set(a1), s2=set(a2);
+  return [...s1].filter(x=>s2.has(x)).map(id=>T[id]).sort((a,b)=>a.position-b.position);
+}
+const mcs = DATA.artists.filter(a=>a.type==="mc" && a.tier==="core");
+const leaders = DATA.artists.filter(a=>relsByArtist[a.id]);
+
+/* ============================================================================
+   ROUTING
+   ==========================================================================*/
+const state={view:"browse",tab:"artists",artist:null,release:null,track:null,cell:null,q:""};
+function readHash(){
+  const [,kind,id]=(location.hash||"").replace(/^#\/?/,"/").split("/");
+  state.view="browse"; state.artist=state.release=null;
+  if(kind==="matrix"){ state.view="matrix"; return; }
+  if(kind==="artist"&&A[id]){ state.tab="artists"; state.artist=id; state.track=null; }
+  else if(kind==="release"&&R[id]){ state.tab="releases"; state.release=id; state.track=null; }
+  else if(kind==="track"&&T[id]){ state.track=id; state.release=T[id].release_id;
+    if(state.tab==="artists") state.tab="releases"; }
+}
+const go = h => location.hash = h;
+addEventListener("hashchange",()=>{readHash();render();});
+
+/* ============================================================================
+   RENDER
+   ==========================================================================*/
+const main=document.getElementById("main");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hit=(s,q)=>!q||s.toLowerCase().includes(q.toLowerCase());
+
+function coverage(){
+  const done=DATA.releases.filter(synced).length, all=DATA.releases.length;
+  document.getElementById("coverage").innerHTML =
+    `<span class="meter"><i style="width:${(done/all*100).toFixed(1)}%"></i></span>
+     <span>${done}/${all} releases synced · ${DATA.tracks.length} tracks</span>`;
+}
+
+function chamberOne(){
+  const q=state.q; let list="";
+  if(state.tab==="artists"){
+    list = mcs.filter(a=>hit(a.name,q)||a.aka.some(k=>hit(k,q))).map(a=>{
+      const n=tracksForArtist(a.id).length, rel=(relsByArtist[a.id]||[]).length;
+      return `<button class="row" data-go="#/artist/${a.id}" aria-current="${state.artist===a.id}">
+        <span class="row-name">${esc(a.name)}<span class="row-sub">${rel} releases as lead</span></span>
+        <span class="row-count">${n}</span></button>`;
+    }).join("");
+  } else {
+    list = leaders.map(a=>{
+      const rows=(relsByArtist[a.id]||[]).filter(r=>hit(r.title,q)||hit(a.name,q));
+      if(!rows.length) return "";
+      return `<div class="group-head">${esc(a.name)}</div>` + rows.map(r=>{
+        const n=synced(r);
+        return `<button class="row" data-go="#/release/${r.id}" aria-current="${state.release===r.id}">
+          <span class="dot ${n?"":"empty"}"></span>
+          <span class="row-name">${esc(r.title)}<span class="row-sub">${esc(r.label)} · ${esc(r.kind)}</span></span>
+          <span class="row-meta">${r.year}</span></button>`;
+      }).join("");
+    }).join("");
+  }
+  return `<div class="pane ${state.track?"passed":""}">
+    <div class="pane-head"><span class="numeral">I</span><div class="pane-title">Who &amp; What</div>
+      <div class="pane-sub">${state.tab==="artists"?"count = tracks with credits":"filled dot = tracklist synced"}</div></div>
+    <div class="tabs">
+      <button data-tab="artists"  aria-selected="${state.tab==="artists"}">Rappers</button>
+      <button data-tab="releases" aria-selected="${state.tab==="releases"}">Releases</button>
+    </div>
+    <div class="filter"><input id="q" type="search" placeholder="filter\u2026" value="${esc(q)}"></div>
+    <div class="pane-body">${list||`<div class="empty"><b>No match</b>Nothing here matches that filter.</div>`}</div></div>`;
+}
+
+function chamberTwo(){
+  let body="", sub="\u2014";
+  if(state.artist){
+    const a=A[state.artist], rels=relsByArtist[a.id]||[], trs=tracksForArtist(a.id);
+    sub=`${a.name}`;
+    body = `<div class="group-head">Releases as lead</div>` +
+      (rels.length ? rels.map(r=>`<button class="row" data-go="#/release/${r.id}">
+        <span class="dot ${synced(r)?"":"empty"}"></span>
+        <span class="row-name">${esc(r.title)}<span class="row-sub">${esc(r.kind)}</span></span>
+        <span class="row-meta">${r.year}</span></button>`).join("")
+       : `<div class="empty">No releases as lead artist.</div>`) +
+      `<div class="group-head">Appearances</div>` +
+      (trs.length ? trs.map(t=>{
+        const roles=[...new Set((apsByTrack[t.id]||[]).filter(ap=>ap.artist_id===a.id).map(ap=>ap.role))];
+        return `<button class="row" data-go="#/track/${t.id}" aria-current="${state.track===t.id}">
+          <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+          <span class="row-name">${esc(t.title)}<span class="row-sub">${esc(R[t.release_id].title)} · ${roles.join(" \u00b7 ")}</span></span>
+        </button>`;}).join("")
+       : `<div class="empty">No credits yet. Run the sync to fill these in.</div>`);
+  } else if(state.release){
+    const r=R[state.release], trs=tracksByRelease[r.id]||[];
+    sub=r.title;
+    body = trs.length ? trs.map(t=>`<button class="row" data-go="#/track/${t.id}" aria-current="${state.track===t.id}">
+        <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+        <span class="row-name">${esc(t.title)}<span class="row-sub">${(apsByTrack[t.id]||[]).filter(a=>ON_MIC.has(a.role)).length} on mic</span></span>
+        <span class="row-meta">${t.duration||"\u2013:\u2013\u2013"}</span></button>`).join("")
+      : `<div class="empty"><b>Not synced</b>No tracklist for <em>${esc(r.title)}</em> yet. The spine has the release; the scraper hasn't filled the tracks.</div>`;
+  } else {
+    body=`<div class="empty"><b>Nothing selected</b>Pick a rapper or a release in chamber I.</div>`;
+  }
+  return `<div class="pane ${state.track?"passed":""}">
+    <div class="pane-head"><span class="numeral">II</span><div class="pane-title">Tracks</div>
+      <div class="pane-sub">${esc(sub)}</div></div>
+    <div class="pane-body">${body}</div></div>`;
+}
+
+function chamberThree(){
+  let body;
+  if(!state.track){
+    body=`<div class="empty"><b>No track open</b>Choose a track in chamber II and every credited body on it lands here \u2014 verses in order, then production.</div>`;
+  } else {
+    const t=T[state.track], rel=R[t.release_id], aps=apsByTrack[t.id]||[];
+    const mic=aps.filter(ap=>ON_MIC.has(ap.role)).sort((a,b)=>(a.slot??99)-(b.slot??99));
+    const desk=aps.filter(ap=>!ON_MIC.has(ap.role));
+    const line=ap=>`<button class="credit" data-go="#/artist/${ap.artist_id}">
+      <span class="credit-slot">${ap.slot?String(ap.slot).padStart(2,"0"):"\u2014"}</span>
+      <span class="credit-name ${ap.credited?"":"uncredited"}">${esc(A[ap.artist_id]?.name||ap.artist_id)}${
+        ap.note?`<span class="row-sub">${esc(ap.note)}</span>`:""}</span>
+      <span class="chip ${ap.role}">${ap.role}</span></button>`;
+    body=`<div class="detail"><h2>${esc(t.title)}</h2>
+      <div class="origin">${String(t.position).padStart(2,"0")} \u00b7 <a href="#/release/${rel.id}">${esc(rel.title)}</a> \u00b7 ${rel.year}</div>
+      <div class="section-label">On the mic</div>
+      ${mic.length?mic.map(line).join(""):`<div class="empty">No vocal credits recorded.</div>`}
+      <div class="section-label">Behind the boards</div>
+      ${desk.length?desk.map(line).join(""):`<div class="empty">No production credits recorded.</div>`}</div>`;
+  }
+  return `<div class="pane"><div class="pane-head"><span class="numeral">III</span>
+    <div class="pane-title">Credits</div><div class="pane-sub">click any name to jump to their map</div></div>
+    <div class="pane-body">${body}</div></div>`;
+}
+
+function matrixView(){
+  const counts=mcs.map(a=>mcs.map(b=>a.id===b.id?-1:sharedTracks(a.id,b.id).length));
+  const max=Math.max(1,...counts.flat());
+  const head=mcs.map(a=>`<th><div>${esc(a.name)}</div></th>`).join("");
+  const rows=mcs.map((a,i)=>`<tr><th>${esc(a.name)}</th>${mcs.map((b,j)=>{
+    const n=counts[i][j];
+    if(n<0) return `<td class="diag"></td>`;
+    if(n===0) return `<td class="zero">0</td>`;
+    return `<td class="hit" tabindex="0" data-cell="${a.id}|${b.id}"
+      style="background:rgba(200,162,39,${(.18+.82*(n/max)).toFixed(2)})"
+      title="${esc(a.name)} + ${esc(b.name)}: ${n}">${n}</td>`;
+  }).join("")}</tr>`).join("");
+  let out=`<div class="matrix-out"><h3>Pick a cell</h3></div>`;
+  if(state.cell){
+    const [x,y]=state.cell.split("|"), list=sharedTracks(x,y);
+    out=`<div class="matrix-out"><h3>${esc(A[x].name)} + ${esc(A[y].name)}</h3>
+      ${list.map(t=>`<button class="row" data-go="#/track/${t.id}">
+        <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+        <span class="row-name">${esc(t.title)}<span class="row-sub">${esc(R[t.release_id].title)}</span></span></button>`).join("")}</div>`;
+  }
+  return `<div class="matrix-wrap">
+    <p class="matrix-intro">Shared tracks among the core ten, on-mic only. Right now this is one album's worth of
+    data against an eighty-release spine \u2014 it will stay misleading until the sync catches up.</p>
+    <table class="matrix"><thead><tr><th></th>${head}</tr></thead><tbody>${rows}</tbody></table>${out}</div>`;
+}
+
+function render(){
+  document.getElementById("v-browse").setAttribute("aria-pressed",state.view==="browse");
+  document.getElementById("v-matrix").setAttribute("aria-pressed",state.view==="matrix");
+  main.innerHTML = state.view==="matrix" ? matrixView()
+    : `<div class="chambers">${chamberOne()}${chamberTwo()}${chamberThree()}</div>`;
+  coverage(); wire();
+}
+function wire(){
+  main.querySelectorAll("[data-go]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.go)));
+  main.querySelectorAll("[data-tab]").forEach(el=>el.addEventListener("click",()=>{
+    state.tab=el.dataset.tab; state.artist=state.release=null; go("#/"); render(); }));
+  main.querySelectorAll("[data-cell]").forEach(el=>{
+    const pick=()=>{state.cell=el.dataset.cell;render();};
+    el.addEventListener("click",pick);
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}});
+  });
+  const q=document.getElementById("q");
+  if(q) q.addEventListener("input",()=>{
+    state.q=q.value; const pos=q.selectionStart; render();
+    const n=document.getElementById("q"); if(n){n.focus();n.setSelectionRange(pos,pos);} });
+}
+document.getElementById("v-browse").addEventListener("click",()=>{state.view="browse";state.cell=null;go("#/");render();});
+document.getElementById("v-matrix").addEventListener("click",()=>{go("#/matrix");render();});
+readHash(); render();
+</script>
+</body>
+</html>
