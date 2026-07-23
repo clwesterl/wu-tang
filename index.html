@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wu-Tang Credit Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0B0C; --slab:#141416; --slab-2:#1C1C1F;
+  --gold:#C8A227; --gold-hot:#F2C744; --blood:#8C1C13;
+  --bone:#E6E1D3; --smoke:#6E6A63;
+  --display:"Big Shoulders Display","Arial Narrow",sans-serif;
+  --body:"Archivo",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --rule:1px solid rgba(200,162,39,.22);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--body);font-size:14px;
+  line-height:1.45;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+header{border-bottom:var(--rule);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;padding:14px 20px 12px}
+h1{margin:0;font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.02em;
+  line-height:.9;color:var(--gold);text-transform:uppercase}
+h1 span{color:var(--bone)}
+.tagline{font-family:var(--mono);font-size:11px;color:var(--smoke);letter-spacing:.06em}
+.views{margin-left:auto;display:flex;border:1px solid rgba(200,162,39,.3)}
+.views button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;color:var(--smoke);border:0;padding:7px 14px;cursor:pointer}
+.views button+button{border-left:1px solid rgba(200,162,39,.3)}
+.views button[aria-pressed="true"]{background:var(--gold);color:var(--ink);font-weight:500}
+.views button:focus-visible{outline:2px solid var(--gold-hot);outline-offset:2px}
+.views[hidden]{display:none}
+
+.coverage{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--smoke)}
+.meter{width:96px;height:6px;background:rgba(230,225,211,.12);position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--gold);display:block}
+
+main{flex:1;min-height:0;display:flex}
+.chambers{display:grid;grid-template-columns:minmax(230px,1fr) minmax(250px,1.15fr) minmax(260px,1.3fr);
+  gap:1px;background:rgba(200,162,39,.18);width:100%;min-height:0}
+.pane{background:var(--slab);display:flex;flex-direction:column;min-height:0;min-width:0;transition:opacity .18s ease}
+.pane.passed{opacity:.6}
+.pane-head{padding:11px 16px 9px;border-bottom:var(--rule);background:var(--ink);flex:0 0 auto}
+.numeral{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.22em;color:var(--gold);display:block}
+.pane-title{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.05;text-transform:uppercase}
+.pane-sub{font-family:var(--mono);font-size:10.5px;color:var(--smoke);margin-top:3px;letter-spacing:.04em}
+.pane-body{overflow-y:auto;flex:1;min-height:0}
+
+.tabs{display:flex;border-bottom:var(--rule)}
+.tabs button{flex:1;background:transparent;border:0;cursor:pointer;padding:9px 6px;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--smoke)}
+.tabs button[aria-selected="true"]{color:var(--gold-hot);box-shadow:inset 0 -2px 0 var(--gold)}
+.tabs button:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+
+.filter input{width:100%;background:var(--slab-2);border:0;border-bottom:var(--rule);color:var(--bone);
+  font-family:var(--mono);font-size:11px;padding:9px 16px;letter-spacing:.04em}
+.filter input::placeholder{color:var(--smoke)}
+.filter input:focus{outline:2px solid var(--gold);outline-offset:-2px}
+
+.group-head{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);padding:14px 16px 5px;border-bottom:1px solid rgba(200,162,39,.16);
+  position:sticky;top:0;background:var(--slab)}
+.row{display:flex;align-items:baseline;gap:10px;width:100%;text-align:left;background:transparent;border:0;
+  border-bottom:1px solid rgba(230,225,211,.07);color:var(--bone);cursor:pointer;padding:9px 16px;font:inherit}
+.row:hover{background:var(--slab-2)}
+.row[aria-current="true"]{background:rgba(200,162,39,.13);box-shadow:inset 3px 0 0 var(--gold)}
+.row:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.row-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-num{font-family:var(--mono);font-size:11px;color:var(--smoke);width:2ch;flex:0 0 auto}
+.row-count{font-family:var(--mono);font-size:11px;color:var(--gold);flex:0 0 auto}
+.row-meta{font-family:var(--mono);font-size:10.5px;color:var(--smoke);flex:0 0 auto}
+.row-sub{display:block;font-family:var(--mono);font-size:10px;color:var(--smoke);margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{width:6px;height:6px;flex:0 0 auto;border-radius:50%;background:var(--gold)}
+.dot.empty{background:none;border:1px solid rgba(230,225,211,.22)}
+
+.empty{padding:26px 18px;color:var(--smoke);font-size:13px;max-width:38ch}
+.empty b{color:var(--bone);font-weight:600;display:block;margin-bottom:5px;font-family:var(--display);
+  font-size:17px;text-transform:uppercase}
+.empty code{font-family:var(--mono);font-size:11.5px;color:var(--gold);background:var(--slab-2);padding:1px 5px}
+
+.detail{padding:16px}
+.detail h2{font-family:var(--display);font-weight:900;font-size:27px;line-height:1;margin:0 0 4px;text-transform:uppercase}
+.detail .origin{font-family:var(--mono);font-size:11px;color:var(--smoke);margin-bottom:16px}
+.detail .origin a{color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--gold)}
+.credit{display:flex;align-items:baseline;gap:10px;padding:7px 0;border:0;border-bottom:1px solid rgba(230,225,211,.07);
+  width:100%;background:transparent;color:var(--bone);font:inherit;text-align:left;cursor:pointer}
+.credit:hover .credit-name{color:var(--gold-hot)}
+.credit:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.credit-slot{font-family:var(--mono);font-size:10.5px;color:var(--smoke);width:4.5ch;flex:0 0 auto}
+.credit-name{flex:1;font-weight:500}
+.chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 6px;border:1px solid currentColor;flex:0 0 auto}
+.chip.performer{color:var(--gold)} .chip.hook{color:var(--bone)}
+.chip.producer{color:var(--blood)} .chip.writer,.chip.scratches{color:var(--smoke)}
+.chip.skit,.chip.sample{color:var(--smoke)}
+.uncredited{color:var(--smoke);font-style:italic}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--smoke);margin:20px 0 6px;padding-bottom:4px;border-bottom:var(--rule)}
+.section-label:first-child{margin-top:0}
+
+.matrix-wrap{width:100%;overflow:auto;padding:26px 20px 40px}
+.matrix-intro{max-width:58ch;color:var(--smoke);margin:0 0 22px;font-size:13px}
+table.matrix{border-collapse:collapse;font-family:var(--mono);font-size:11px}
+table.matrix th{font-weight:400;color:var(--smoke);white-space:nowrap}
+table.matrix thead th{height:130px;vertical-align:bottom;padding:0 0 8px}
+table.matrix thead th div{writing-mode:vertical-rl;transform:rotate(180deg);text-align:left;color:var(--bone)}
+table.matrix tbody th{text-align:right;padding:0 12px 0 0;color:var(--bone)}
+table.matrix td{width:38px;height:38px;text-align:center;border:1px solid rgba(230,225,211,.08);
+  cursor:pointer;color:var(--ink);font-weight:500;padding:0}
+table.matrix td.zero{color:rgba(230,225,211,.16);cursor:default}
+table.matrix td.diag{background:repeating-linear-gradient(45deg,transparent,transparent 3px,
+  rgba(230,225,211,.07) 3px,rgba(230,225,211,.07) 4px);cursor:default}
+table.matrix td.hit:hover,table.matrix td:focus-visible{outline:2px solid var(--gold-hot);outline-offset:-2px}
+.matrix-out{margin-top:26px;max-width:62ch}
+.matrix-out h3{font-family:var(--display);font-size:20px;text-transform:uppercase;margin:0 0 8px}
+
+/* load + failure */
+.boot{padding:48px 24px;max-width:62ch}
+.boot h2{font-family:var(--display);font-size:26px;text-transform:uppercase;margin:0 0 10px;color:var(--gold)}
+.boot p{color:var(--smoke);margin:0 0 12px}
+.boot pre{font-family:var(--mono);font-size:12px;background:var(--slab);border:var(--rule);
+  padding:12px 14px;overflow-x:auto;color:var(--bone);margin:0 0 12px}
+.boot .why{color:var(--blood);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+
+@media (max-width:900px){
+  main{display:block;overflow-y:auto}
+  .chambers{display:block;background:none}
+  .pane{border-bottom:var(--rule)} .pane.passed{opacity:1}
+  .pane-body{overflow:visible} .group-head{position:static} h1{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Wu-Tang <span>Credit Map</span></h1>
+    <div class="tagline">who is on what · a tripartite credit graph</div>
+  </div>
+  <div class="coverage" id="coverage"></div>
+  <div class="views" id="views" hidden>
+    <button id="v-browse" aria-pressed="true">Browse</button>
+    <button id="v-matrix" aria-pressed="false">Matrix</button>
+  </div>
+</header>
+
+<main id="main"><div class="boot"><h2>Loading</h2><p>Reading data.json\u2026</p></div></main>
+
+<script>
+/* ============================================================================
+   Wu-Tang Credit Map — viewer only.
+   All data lives in data.json, generated by sync_wu.py. Nothing in this file
+   is a source of truth; edit spine.json or manual_overrides.json instead.
+   ==========================================================================*/
+const main = document.getElementById("main");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hit = (s,q) => !q || s.toLowerCase().includes(q.toLowerCase());
+const ON_MIC = new Set(["performer","hook"]);
+
+let DATA, A, R, T, apsByTrack, apsByArtist, tracksByRelease, relsByArtist, mcs, leaders;
+const state = {view:"browse",tab:"artists",artist:null,release:null,track:null,cell:null,q:""};
+
+/* ------------------------------------------------------------------ boot */
+async function boot(){
+  let raw;
+  try{
+    const res = await fetch("./data.json", {cache:"no-store"});
+    if(!res.ok) throw new Error(`data.json returned ${res.status}`);
+    raw = await res.json();
+  }catch(err){
+    return fail(err);
+  }
+  DATA = raw;
+  index();
+  document.getElementById("views").hidden = false;
+  readHash();
+  render();
+}
+
+function fail(err){
+  const isFile = location.protocol === "file:";
+  main.innerHTML = `<div class="boot">
+    <h2>Can't read data.json</h2>
+    <div class="why">${esc(err.message||String(err))}</div>
+    ${isFile ? `<p>You opened this file directly, so the browser blocked the fetch. Serve the
+        folder over HTTP instead:</p>
+      <pre>cd wu-tang && python3 -m http.server 8000
+open http://localhost:8000</pre>`
+     : `<p>data.json is missing or malformed. Regenerate it:</p>
+      <pre>python3 sync_wu.py --all</pre>
+      <p>If you haven't run a sync yet, the seeded copy in the repo should be
+         sitting next to index.html.</p>`}
+  </div>`;
+}
+
+function index(){
+  const byId = a => Object.fromEntries(a.map(x=>[x.id,x]));
+  A = byId(DATA.artists); R = byId(DATA.releases); T = byId(DATA.tracks);
+  apsByTrack={}; apsByArtist={}; tracksByRelease={}; relsByArtist={};
+  for(const ap of DATA.appearances){
+    (apsByTrack[ap.track_id] ||= []).push(ap);
+    (apsByArtist[ap.artist_id] ||= []).push(ap);
+  }
+  for(const t of DATA.tracks) (tracksByRelease[t.release_id] ||= []).push(t);
+  for(const k in tracksByRelease) tracksByRelease[k].sort((a,b)=>a.position-b.position);
+  for(const r of DATA.releases) (relsByArtist[r.artist_id] ||= []).push(r);
+  for(const k in relsByArtist) relsByArtist[k].sort((a,b)=>a.year-b.year);
+  mcs = DATA.artists.filter(a=>a.type==="mc" && a.tier==="core");
+  leaders = DATA.artists.filter(a=>relsByArtist[a.id]);
+}
+
+const synced = r => (tracksByRelease[r.id]||[]).length;
+function tracksForArtist(id){
+  const seen=new Set();
+  return (apsByArtist[id]||[]).map(ap=>T[ap.track_id])
+    .filter(t=>t && !seen.has(t.id) && seen.add(t.id))
+    .sort((a,b)=>a.release_id.localeCompare(b.release_id)||a.position-b.position);
+}
+function sharedTracks(a1,a2){
+  const set = id => new Set((apsByArtist[id]||[]).filter(ap=>ON_MIC.has(ap.role)).map(ap=>ap.track_id));
+  const s1=set(a1), s2=set(a2);
+  return [...s1].filter(x=>s2.has(x)).map(id=>T[id])
+    .sort((a,b)=>a.release_id.localeCompare(b.release_id)||a.position-b.position);
+}
+
+/* --------------------------------------------------------------- routing */
+function readHash(){
+  const [,kind,id]=(location.hash||"").replace(/^#\/?/,"/").split("/");
+  state.view="browse"; state.artist=state.release=null;
+  if(kind==="matrix"){ state.view="matrix"; return; }
+  if(kind==="artist"&&A[id]){ state.tab="artists"; state.artist=id; state.track=null; }
+  else if(kind==="release"&&R[id]){ state.tab="releases"; state.release=id; state.track=null; }
+  else if(kind==="track"&&T[id]){ state.track=id; state.release=T[id].release_id;
+    if(state.tab==="artists") state.tab="releases"; }
+}
+const go = h => location.hash = h;
+addEventListener("hashchange",()=>{ if(DATA){ readHash(); render(); } });
+
+/* ---------------------------------------------------------------- render */
+function coverage(){
+  const done=DATA.releases.filter(synced).length, all=DATA.releases.length;
+  document.getElementById("coverage").innerHTML =
+    `<span class="meter"><i style="width:${(done/all*100).toFixed(1)}%"></i></span>
+     <span>${done}/${all} releases synced · ${DATA.tracks.length} tracks</span>`;
+}
+
+function chamberOne(){
+  const q=state.q; let list="";
+  if(state.tab==="artists"){
+    list = mcs.filter(a=>hit(a.name,q)||(a.aka||[]).some(k=>hit(k,q))).map(a=>{
+      const n=tracksForArtist(a.id).length, rel=(relsByArtist[a.id]||[]).length;
+      return `<button class="row" data-go="#/artist/${a.id}" aria-current="${state.artist===a.id}">
+        <span class="row-name">${esc(a.name)}<span class="row-sub">${rel} releases as lead</span></span>
+        <span class="row-count">${n}</span></button>`;
+    }).join("");
+  } else {
+    list = leaders.map(a=>{
+      const rows=(relsByArtist[a.id]||[]).filter(r=>hit(r.title,q)||hit(a.name,q));
+      if(!rows.length) return "";
+      return `<div class="group-head">${esc(a.name)}</div>` + rows.map(r=>{
+        return `<button class="row" data-go="#/release/${r.id}" aria-current="${state.release===r.id}">
+          <span class="dot ${synced(r)?"":"empty"}"></span>
+          <span class="row-name">${esc(r.title)}<span class="row-sub">${esc(r.label||"")} · ${esc(r.kind)}</span></span>
+          <span class="row-meta">${r.year}</span></button>`;
+      }).join("");
+    }).join("");
+  }
+  return `<div class="pane ${state.track?"passed":""}">
+    <div class="pane-head"><span class="numeral">I</span><div class="pane-title">Who &amp; What</div>
+      <div class="pane-sub">${state.tab==="artists"?"count = tracks with credits":"filled dot = tracklist synced"}</div></div>
+    <div class="tabs">
+      <button data-tab="artists"  aria-selected="${state.tab==="artists"}">Rappers</button>
+      <button data-tab="releases" aria-selected="${state.tab==="releases"}">Releases</button>
+    </div>
+    <div class="filter"><input id="q" type="search" placeholder="filter\u2026" value="${esc(q)}"></div>
+    <div class="pane-body">${list||`<div class="empty"><b>No match</b>Nothing here matches that filter.</div>`}</div></div>`;
+}
+
+function chamberTwo(){
+  let body="", sub="\u2014";
+  if(state.artist){
+    const a=A[state.artist], rels=relsByArtist[a.id]||[], trs=tracksForArtist(a.id);
+    sub=a.name;
+    body = `<div class="group-head">Releases as lead</div>` +
+      (rels.length ? rels.map(r=>`<button class="row" data-go="#/release/${r.id}">
+        <span class="dot ${synced(r)?"":"empty"}"></span>
+        <span class="row-name">${esc(r.title)}<span class="row-sub">${esc(r.kind)}</span></span>
+        <span class="row-meta">${r.year}</span></button>`).join("")
+       : `<div class="empty">No releases as lead artist.</div>`) +
+      `<div class="group-head">Appearances</div>` +
+      (trs.length ? trs.map(t=>{
+        const roles=[...new Set((apsByTrack[t.id]||[]).filter(ap=>ap.artist_id===a.id).map(ap=>ap.role))];
+        return `<button class="row" data-go="#/track/${t.id}" aria-current="${state.track===t.id}">
+          <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+          <span class="row-name">${esc(t.title)}<span class="row-sub">${esc(R[t.release_id].title)} · ${roles.join(" \u00b7 ")}</span></span>
+        </button>`;}).join("")
+       : `<div class="empty">No credits yet. Run <code>sync_wu.py</code> to fill these in.</div>`);
+  } else if(state.release){
+    const r=R[state.release], trs=tracksByRelease[r.id]||[];
+    sub=r.title;
+    body = trs.length ? trs.map(t=>`<button class="row" data-go="#/track/${t.id}" aria-current="${state.track===t.id}">
+        <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+        <span class="row-name">${esc(t.title)}<span class="row-sub">${(apsByTrack[t.id]||[]).filter(a=>ON_MIC.has(a.role)).length} on mic</span></span>
+        <span class="row-meta">${t.duration||"\u2013:\u2013\u2013"}</span></button>`).join("")
+      : `<div class="empty"><b>Not synced</b>No tracklist for <em>${esc(r.title)}</em> yet.<br><br>
+         <code>python3 sync_wu.py --release ${esc(r.id)}</code></div>`;
+  } else {
+    body=`<div class="empty"><b>Nothing selected</b>Pick a rapper or a release in chamber I.</div>`;
+  }
+  return `<div class="pane ${state.track?"passed":""}">
+    <div class="pane-head"><span class="numeral">II</span><div class="pane-title">Tracks</div>
+      <div class="pane-sub">${esc(sub)}</div></div>
+    <div class="pane-body">${body}</div></div>`;
+}
+
+function chamberThree(){
+  let body;
+  if(!state.track){
+    body=`<div class="empty"><b>No track open</b>Choose a track in chamber II and every credited body on it lands here \u2014 verses in order, then production.</div>`;
+  } else {
+    const t=T[state.track], rel=R[t.release_id], aps=apsByTrack[t.id]||[];
+    const mic=aps.filter(ap=>ON_MIC.has(ap.role)).sort((a,b)=>(a.slot??99)-(b.slot??99));
+    const desk=aps.filter(ap=>!ON_MIC.has(ap.role));
+    const line=ap=>`<button class="credit" data-go="#/artist/${ap.artist_id}">
+      <span class="credit-slot">${ap.slot?String(ap.slot).padStart(2,"0"):"\u2014"}</span>
+      <span class="credit-name ${ap.credited?"":"uncredited"}">${esc(A[ap.artist_id]?.name||ap.artist_id)}${
+        ap.note?`<span class="row-sub">${esc(ap.note)}</span>`:""}</span>
+      <span class="chip ${esc(ap.role)}">${esc(ap.role)}</span></button>`;
+    body=`<div class="detail"><h2>${esc(t.title)}</h2>
+      <div class="origin">${String(t.position).padStart(2,"0")} \u00b7 <a href="#/release/${rel.id}">${esc(rel.title)}</a> \u00b7 ${rel.year}</div>
+      <div class="section-label">On the mic</div>
+      ${mic.length?mic.map(line).join(""):`<div class="empty">No vocal credits recorded.</div>`}
+      <div class="section-label">Behind the boards</div>
+      ${desk.length?desk.map(line).join(""):`<div class="empty">No production credits recorded.</div>`}</div>`;
+  }
+  return `<div class="pane"><div class="pane-head"><span class="numeral">III</span>
+    <div class="pane-title">Credits</div><div class="pane-sub">click any name to jump to their map</div></div>
+    <div class="pane-body">${body}</div></div>`;
+}
+
+function matrixView(){
+  const counts=mcs.map(a=>mcs.map(b=>a.id===b.id?-1:sharedTracks(a.id,b.id).length));
+  const max=Math.max(1,...counts.flat());
+  const head=mcs.map(a=>`<th><div>${esc(a.name)}</div></th>`).join("");
+  const rows=mcs.map((a,i)=>`<tr><th>${esc(a.name)}</th>${mcs.map((b,j)=>{
+    const n=counts[i][j];
+    if(n<0) return `<td class="diag"></td>`;
+    if(n===0) return `<td class="zero">0</td>`;
+    return `<td class="hit" tabindex="0" data-cell="${a.id}|${b.id}"
+      style="background:rgba(200,162,39,${(.18+.82*(n/max)).toFixed(2)})"
+      title="${esc(a.name)} + ${esc(b.name)}: ${n}">${n}</td>`;
+  }).join("")}</tr>`).join("");
+  let out=`<div class="matrix-out"><h3>Pick a cell</h3></div>`;
+  if(state.cell){
+    const [x,y]=state.cell.split("|"), list=sharedTracks(x,y);
+    out=`<div class="matrix-out"><h3>${esc(A[x].name)} + ${esc(A[y].name)}</h3>
+      ${list.map(t=>`<button class="row" data-go="#/track/${t.id}">
+        <span class="row-num">${String(t.position).padStart(2,"0")}</span>
+        <span class="row-name">${esc(t.title)}<span class="row-sub">${esc(R[t.release_id].title)}</span></span></button>`).join("")}</div>`;
+  }
+  const done=DATA.releases.filter(synced).length;
+  return `<div class="matrix-wrap">
+    <p class="matrix-intro">Shared tracks among the core ten, on-mic only. ${done} of
+    ${DATA.releases.length} releases are synced, so read this as a shape test until that number climbs.</p>
+    <table class="matrix"><thead><tr><th></th>${head}</tr></thead><tbody>${rows}</tbody></table>${out}</div>`;
+}
+
+function render(){
+  document.getElementById("v-browse").setAttribute("aria-pressed",state.view==="browse");
+  document.getElementById("v-matrix").setAttribute("aria-pressed",state.view==="matrix");
+  main.innerHTML = state.view==="matrix" ? matrixView()
+    : `<div class="chambers">${chamberOne()}${chamberTwo()}${chamberThree()}</div>`;
+  coverage(); wire();
+}
+
+function wire(){
+  main.querySelectorAll("[data-go]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.go)));
+  main.querySelectorAll("[data-tab]").forEach(el=>el.addEventListener("click",()=>{
+    state.tab=el.dataset.tab; state.artist=state.release=null; go("#/"); render(); }));
+  main.querySelectorAll("[data-cell]").forEach(el=>{
+    const pick=()=>{state.cell=el.dataset.cell;render();};
+    el.addEventListener("click",pick);
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}});
+  });
+  const q=document.getElementById("q");
+  if(q) q.addEventListener("input",()=>{
+    state.q=q.value; const pos=q.selectionStart; render();
+    const n=document.getElementById("q"); if(n){n.focus();n.setSelectionRange(pos,pos);} });
+}
+
+document.getElementById("v-browse").addEventListener("click",()=>{state.view="browse";state.cell=null;go("#/");render();});
+document.getElementById("v-matrix").addEventListener("click",()=>{go("#/matrix");render();});
+
+boot();
+</script>
+</body>
+</html>

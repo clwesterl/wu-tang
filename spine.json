@@ -1,0 +1,880 @@
+{
+ "meta": {
+  "note": "hand-maintained; sync_wu.py writes back only discogs_id",
+  "spine_verified": false
+ },
+ "artists": [
+  {
+   "id": "wu-tang-clan",
+   "name": "Wu-Tang Clan",
+   "aka": [],
+   "type": "group",
+   "tier": "core"
+  },
+  {
+   "id": "rza",
+   "name": "RZA",
+   "aka": [
+    "Prince Rakeem",
+    "Bobby Digital"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "gza",
+   "name": "GZA",
+   "aka": [
+    "The Genius"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "ol-dirty-bastard",
+   "name": "Ol' Dirty Bastard",
+   "aka": [
+    "ODB",
+    "Dirt McGirt"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "method-man",
+   "name": "Method Man",
+   "aka": [
+    "Johnny Blaze",
+    "Tical"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "raekwon",
+   "name": "Raekwon",
+   "aka": [
+    "The Chef",
+    "Lex Diamonds"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "ghostface-killah",
+   "name": "Ghostface Killah",
+   "aka": [
+    "Tony Starks",
+    "Pretty Toney"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "inspectah-deck",
+   "name": "Inspectah Deck",
+   "aka": [
+    "Rebel INS"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "u-god",
+   "name": "U-God",
+   "aka": [
+    "Golden Arms"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "masta-killa",
+   "name": "Masta Killa",
+   "aka": [
+    "Noodles"
+   ],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "cappadonna",
+   "name": "Cappadonna",
+   "aka": [],
+   "type": "mc",
+   "tier": "core"
+  },
+  {
+   "id": "gravediggaz",
+   "name": "Gravediggaz",
+   "aka": [],
+   "type": "group",
+   "tier": "affiliate"
+  },
+  {
+   "id": "czarface",
+   "name": "Czarface",
+   "aka": [],
+   "type": "group",
+   "tier": "affiliate"
+  }
+ ],
+ "releases": [
+  {
+   "id": "36-chambers",
+   "title": "Enter the Wu-Tang (36 Chambers)",
+   "artist_id": "wu-tang-clan",
+   "year": 1993,
+   "label": "Loud / RCA",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "wu-tang-forever",
+   "title": "Wu-Tang Forever",
+   "artist_id": "wu-tang-clan",
+   "year": 1997,
+   "label": "Loud / RCA",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "the-w",
+   "title": "The W",
+   "artist_id": "wu-tang-clan",
+   "year": 2000,
+   "label": "Loud / Columbia",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "iron-flag",
+   "title": "Iron Flag",
+   "artist_id": "wu-tang-clan",
+   "year": 2001,
+   "label": "Loud / Columbia",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "8-diagrams",
+   "title": "8 Diagrams",
+   "artist_id": "wu-tang-clan",
+   "year": 2007,
+   "label": "SRC / Universal Motown",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "a-better-tomorrow",
+   "title": "A Better Tomorrow",
+   "artist_id": "wu-tang-clan",
+   "year": 2014,
+   "label": "Warner Bros.",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "shaolin-single-copy",
+   "title": "Once Upon a Time in Shaolin",
+   "artist_id": "wu-tang-clan",
+   "year": 2015,
+   "label": "Scluzay",
+   "kind": "unreleased",
+   "discogs_id": null
+  },
+  {
+   "id": "saga-continues",
+   "title": "The Saga Continues",
+   "artist_id": "wu-tang-clan",
+   "year": 2017,
+   "label": "eOne",
+   "kind": "group",
+   "discogs_id": null
+  },
+  {
+   "id": "bobby-digital",
+   "title": "Bobby Digital in Stereo",
+   "artist_id": "rza",
+   "year": 1998,
+   "label": "Gee Street",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "ghost-dog-ost",
+   "title": "Ghost Dog: Way of the Samurai OST",
+   "artist_id": "rza",
+   "year": 1999,
+   "label": "Epic",
+   "kind": "soundtrack",
+   "discogs_id": null
+  },
+  {
+   "id": "digital-bullet",
+   "title": "Digital Bullet",
+   "artist_id": "rza",
+   "year": 2001,
+   "label": "Koch",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "birth-of-a-prince",
+   "title": "Birth of a Prince",
+   "artist_id": "rza",
+   "year": 2003,
+   "label": "Sanctuary Urban",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "afro-samurai-ost",
+   "title": "Afro Samurai OST",
+   "artist_id": "rza",
+   "year": 2007,
+   "label": "Koch",
+   "kind": "soundtrack",
+   "discogs_id": null
+  },
+  {
+   "id": "digi-snacks",
+   "title": "Digi Snacks",
+   "artist_id": "rza",
+   "year": 2008,
+   "label": "Koch",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "6-feet-deep",
+   "title": "6 Feet Deep",
+   "artist_id": "gravediggaz",
+   "year": 1994,
+   "label": "Gee Street",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "pick-sickle-shovel",
+   "title": "The Pick, the Sickle and the Shovel",
+   "artist_id": "gravediggaz",
+   "year": 1997,
+   "label": "Gee Street",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "words-from-the-genius",
+   "title": "Words from the Genius",
+   "artist_id": "gza",
+   "year": 1991,
+   "label": "Cold Chillin'",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "liquid-swords",
+   "title": "Liquid Swords",
+   "artist_id": "gza",
+   "year": 1995,
+   "label": "Geffen",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "beneath-the-surface",
+   "title": "Beneath the Surface",
+   "artist_id": "gza",
+   "year": 1999,
+   "label": "MCA",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "legend-liquid-sword",
+   "title": "Legend of the Liquid Sword",
+   "artist_id": "gza",
+   "year": 2002,
+   "label": "MCA",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "grandmasters",
+   "title": "Grandmasters (with DJ Muggs)",
+   "artist_id": "gza",
+   "year": 2005,
+   "label": "Angeles",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "pro-tools",
+   "title": "Pro Tools",
+   "artist_id": "gza",
+   "year": 2008,
+   "label": "Babygrande",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "return-to-36",
+   "title": "Return to the 36 Chambers: The Dirty Version",
+   "artist_id": "ol-dirty-bastard",
+   "year": 1995,
+   "label": "Elektra",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "nigga-please",
+   "title": "N**** Please",
+   "artist_id": "ol-dirty-bastard",
+   "year": 1999,
+   "label": "Elektra",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "trials-tribulations",
+   "title": "The Trials and Tribulations of Russell Jones",
+   "artist_id": "ol-dirty-bastard",
+   "year": 2003,
+   "label": "D3 / Roc-A-Fella",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "a-son-unique",
+   "title": "A Son Unique",
+   "artist_id": "ol-dirty-bastard",
+   "year": 2005,
+   "label": "Roc-A-Fella",
+   "kind": "unreleased",
+   "discogs_id": null
+  },
+  {
+   "id": "tical",
+   "title": "Tical",
+   "artist_id": "method-man",
+   "year": 1994,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "tical-2000",
+   "title": "Tical 2000: Judgement Day",
+   "artist_id": "method-man",
+   "year": 1998,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "blackout",
+   "title": "Blackout! (with Redman)",
+   "artist_id": "method-man",
+   "year": 1999,
+   "label": "Def Jam",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "tical-0",
+   "title": "Tical 0: The Prequel",
+   "artist_id": "method-man",
+   "year": 2004,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "day-after",
+   "title": "4:21... The Day After",
+   "artist_id": "method-man",
+   "year": 2006,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "blackout-2",
+   "title": "Blackout! 2 (with Redman)",
+   "artist_id": "method-man",
+   "year": 2009,
+   "label": "Def Jam",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "meth-lab",
+   "title": "The Meth Lab",
+   "artist_id": "method-man",
+   "year": 2015,
+   "label": "Hanz On / Tommy Boy",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "meth-lab-2",
+   "title": "The Meth Lab Season 2: The Lithium",
+   "artist_id": "method-man",
+   "year": 2018,
+   "label": "Hanz On",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "meth-lab-3",
+   "title": "Meth Lab Season 3: The Rehab",
+   "artist_id": "method-man",
+   "year": 2022,
+   "label": "Hanz On",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "ob4cl",
+   "title": "Only Built 4 Cuban Linx...",
+   "artist_id": "raekwon",
+   "year": 1995,
+   "label": "Loud / RCA",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "immobilarity",
+   "title": "Immobilarity",
+   "artist_id": "raekwon",
+   "year": 1999,
+   "label": "Loud",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "lex-diamond-story",
+   "title": "The Lex Diamond Story",
+   "artist_id": "raekwon",
+   "year": 2003,
+   "label": "Ice H2O / Universal",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "ob4cl2",
+   "title": "Only Built 4 Cuban Linx... Pt. II",
+   "artist_id": "raekwon",
+   "year": 2009,
+   "label": "Ice H2O / EMI",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "shaolin-vs-wu-tang",
+   "title": "Shaolin vs. Wu-Tang",
+   "artist_id": "raekwon",
+   "year": 2011,
+   "label": "Ice H2O",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "fila",
+   "title": "Fly International Luxurious Art",
+   "artist_id": "raekwon",
+   "year": 2015,
+   "label": "Ice H2O / Caroline",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "the-wild",
+   "title": "The Wild",
+   "artist_id": "raekwon",
+   "year": 2017,
+   "label": "Ice H2O / EMPIRE",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "ironman",
+   "title": "Ironman",
+   "artist_id": "ghostface-killah",
+   "year": 1996,
+   "label": "Razor Sharp / Epic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "supreme-clientele",
+   "title": "Supreme Clientele",
+   "artist_id": "ghostface-killah",
+   "year": 2000,
+   "label": "Razor Sharp / Epic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "bulletproof-wallets",
+   "title": "Bulletproof Wallets",
+   "artist_id": "ghostface-killah",
+   "year": 2001,
+   "label": "Epic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "pretty-toney",
+   "title": "The Pretty Toney Album",
+   "artist_id": "ghostface-killah",
+   "year": 2004,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "fishscale",
+   "title": "Fishscale",
+   "artist_id": "ghostface-killah",
+   "year": 2006,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "more-fish",
+   "title": "More Fish",
+   "artist_id": "ghostface-killah",
+   "year": 2006,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "big-doe-rehab",
+   "title": "The Big Doe Rehab",
+   "artist_id": "ghostface-killah",
+   "year": 2007,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "ghostdini",
+   "title": "Ghostdini: Wizard of Poetry in Emerald City",
+   "artist_id": "ghostface-killah",
+   "year": 2009,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "apollo-kids",
+   "title": "Apollo Kids",
+   "artist_id": "ghostface-killah",
+   "year": 2010,
+   "label": "Def Jam",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "twelve-reasons",
+   "title": "Twelve Reasons to Die",
+   "artist_id": "ghostface-killah",
+   "year": 2013,
+   "label": "Soul Temple",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "36-seasons",
+   "title": "36 Seasons",
+   "artist_id": "ghostface-killah",
+   "year": 2014,
+   "label": "Tommy Boy",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "sour-soul",
+   "title": "Sour Soul (with BADBADNOTGOOD)",
+   "artist_id": "ghostface-killah",
+   "year": 2015,
+   "label": "Lex",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "twelve-reasons-2",
+   "title": "Twelve Reasons to Die II",
+   "artist_id": "ghostface-killah",
+   "year": 2015,
+   "label": "Linear Labs",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "ghost-lost-tapes",
+   "title": "The Lost Tapes",
+   "artist_id": "ghostface-killah",
+   "year": 2018,
+   "label": "X-Ray",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "uncontrolled-substance",
+   "title": "Uncontrolled Substance",
+   "artist_id": "inspectah-deck",
+   "year": 1999,
+   "label": "Loud",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "the-movement",
+   "title": "The Movement",
+   "artist_id": "inspectah-deck",
+   "year": 2003,
+   "label": "In the Paint / Koch",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "resident-patient",
+   "title": "The Resident Patient",
+   "artist_id": "inspectah-deck",
+   "year": 2006,
+   "label": "Urban Icon",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "manifesto",
+   "title": "Manifesto",
+   "artist_id": "inspectah-deck",
+   "year": 2010,
+   "label": "Traffic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "chamber-no-9",
+   "title": "Chamber No. 9",
+   "artist_id": "inspectah-deck",
+   "year": 2019,
+   "label": "Bronx Bridge",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "czarface-1",
+   "title": "Czarface",
+   "artist_id": "czarface",
+   "year": 2013,
+   "label": "Brick",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "every-hero",
+   "title": "Every Hero Needs a Villain",
+   "artist_id": "czarface",
+   "year": 2015,
+   "label": "Brick",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "fistful-of-peril",
+   "title": "A Fistful of Peril",
+   "artist_id": "czarface",
+   "year": 2016,
+   "label": "Silver Age",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "czarface-doom",
+   "title": "Czarface Meets Metal Face (with MF DOOM)",
+   "artist_id": "czarface",
+   "year": 2018,
+   "label": "Silver Age",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "odd-czar",
+   "title": "The Odd Czar Against Us",
+   "artist_id": "czarface",
+   "year": 2019,
+   "label": "Silver Age",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "czarface-ghostface",
+   "title": "Czarface Meets Ghostface",
+   "artist_id": "czarface",
+   "year": 2019,
+   "label": "Silver Age",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "super-what",
+   "title": "Super What? (with MF DOOM)",
+   "artist_id": "czarface",
+   "year": 2021,
+   "label": "Silver Age",
+   "kind": "collab",
+   "discogs_id": null
+  },
+  {
+   "id": "golden-arms",
+   "title": "Golden Arms Redemption",
+   "artist_id": "u-god",
+   "year": 1999,
+   "label": "Priority",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "mr-xcitement",
+   "title": "Mr. Xcitement",
+   "artist_id": "u-god",
+   "year": 2005,
+   "label": "Free Agency",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "dopium",
+   "title": "Dopium",
+   "artist_id": "u-god",
+   "year": 2009,
+   "label": "Babygrande",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "keynote-speaker",
+   "title": "The Keynote Speaker",
+   "artist_id": "u-god",
+   "year": 2013,
+   "label": "Soul Temple",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "venom",
+   "title": "Venom",
+   "artist_id": "u-god",
+   "year": 2018,
+   "label": "Babygrande",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "no-said-date",
+   "title": "No Said Date",
+   "artist_id": "masta-killa",
+   "year": 2004,
+   "label": "Nature Sounds",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "made-in-brooklyn",
+   "title": "Made in Brooklyn",
+   "artist_id": "masta-killa",
+   "year": 2006,
+   "label": "Nature Sounds",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "selling-my-soul",
+   "title": "Selling My Soul",
+   "artist_id": "masta-killa",
+   "year": 2012,
+   "label": "Nature Sounds",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "loyalty-is-royalty",
+   "title": "Loyalty Is Royalty",
+   "artist_id": "masta-killa",
+   "year": 2017,
+   "label": "Nature Sounds",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "the-pillage",
+   "title": "The Pillage",
+   "artist_id": "cappadonna",
+   "year": 1998,
+   "label": "Razor Sharp / Epic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "yin-and-yang",
+   "title": "The Yin and the Yang",
+   "artist_id": "cappadonna",
+   "year": 2001,
+   "label": "Epic",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "the-struggle",
+   "title": "The Struggle",
+   "artist_id": "cappadonna",
+   "year": 2003,
+   "label": "Code Red",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "cappatalize",
+   "title": "The Cappatalize Project",
+   "artist_id": "cappadonna",
+   "year": 2008,
+   "label": "Chambermusik",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "slang-prostitution",
+   "title": "Slang Prostitution",
+   "artist_id": "cappadonna",
+   "year": 2009,
+   "label": "Chambermusik",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "eyrth-wynd-fyre",
+   "title": "Eyrth, Wynd & Fyre",
+   "artist_id": "cappadonna",
+   "year": 2013,
+   "label": "Rock Bottom",
+   "kind": "solo",
+   "discogs_id": null
+  },
+  {
+   "id": "wu-massacre",
+   "title": "Wu-Massacre",
+   "artist_id": "method-man",
+   "year": 2010,
+   "label": "Def Jam",
+   "kind": "collab",
+   "discogs_id": null
+  }
+ ]
+}
